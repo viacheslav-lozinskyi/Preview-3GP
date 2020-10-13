@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="PREVIEW-3GP.EC198F83-B43E-48F7-A346-3BA545D132DE" Version="1.0.1" Language="en-US" Publisher="Viacheslav Lozinskyi" />
+        <Identity Id="PREVIEW-3GP.EC198F83-B43E-48F7-A346-3BA545D132DE" Version="1.0.2" Language="en-US" Publisher="Viacheslav Lozinskyi" />
         <DisplayName>Preview-3GP</DisplayName>
-        <Description xml:space="preserve">Quick preview of 3GP files</Description>
+        <Description xml:space="preserve">Quick preview of 3GP and 3G2 files</Description>
         <MoreInfo>https://marketplace.visualstudio.com/items?itemName=ViacheslavLozinskyi.Preview-3GP</MoreInfo>
         <License>resource\document\LICENSE</License>
         <Icon>resource\picture\icon.png</Icon>

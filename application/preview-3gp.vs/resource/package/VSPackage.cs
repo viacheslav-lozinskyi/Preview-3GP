@@ -22,7 +22,7 @@ namespace resource.package
             public const string EXTENSION2 = ".3G2";
             public const string GUID = "4688B3F1-CCCB-4578-859C-E764DEA05DB9";
             public const string NAME = "Preview-3GP";
-            public const string VERSION = "1.0.1";
+            public const string VERSION = "1.0.2";
         }
 
         protected override async Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
