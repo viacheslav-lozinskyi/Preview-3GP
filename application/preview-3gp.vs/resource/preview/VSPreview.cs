@@ -7,7 +7,7 @@ namespace resource.preview
 {
     internal class VSPreview : cartridge.AnyPreview
     {
-        protected override void _Execute(atom.Trace context, string url)
+        protected override void _Execute(atom.Trace context, string url, int level)
         {
             if (File.Exists(url))
             {
@@ -15,13 +15,13 @@ namespace resource.preview
                 {
                     context.
                         SetState(NAME.STATE.HEADER).
-                        Send(NAME.SOURCE.PREVIEW, NAME.TYPE.FOLDER, 1, "[[Info]]");
+                        Send(NAME.SOURCE.PREVIEW, NAME.TYPE.FOLDER, level, "[[Info]]");
                     {
-                        context.Send(NAME.SOURCE.PREVIEW, NAME.TYPE.VARIABLE, 2, "[[File Name]]", url);
-                        context.Send(NAME.SOURCE.PREVIEW, NAME.TYPE.VARIABLE, 2, "[[File Size]]", (new System.IO.FileInfo(url)).Length.ToString());
-                        context.Send(NAME.SOURCE.PREVIEW, NAME.TYPE.VARIABLE, 2, "[[Media Types]]", "Audio, Video");
-                        context.Send(NAME.SOURCE.PREVIEW, NAME.TYPE.VARIABLE, 2, "[[Raw Format]]", __GetString(a_Context, "Expected File Name Extension").ToUpper());
-                        context.Send(NAME.SOURCE.PREVIEW, NAME.TYPE.VARIABLE, 2, "[[Tag Types]]", __GetString(a_Context, "Detected File Type Name"));
+                        context.Send(NAME.SOURCE.PREVIEW, NAME.TYPE.VARIABLE, level + 1, "[[File Name]]", url);
+                        context.Send(NAME.SOURCE.PREVIEW, NAME.TYPE.VARIABLE, level + 1, "[[File Size]]", (new FileInfo(url)).Length.ToString());
+                        context.Send(NAME.SOURCE.PREVIEW, NAME.TYPE.VARIABLE, level + 1, "[[Media Types]]", "Audio, Video");
+                        context.Send(NAME.SOURCE.PREVIEW, NAME.TYPE.VARIABLE, level + 1, "[[Raw Format]]", __GetString(a_Context, "Expected File Name Extension").ToUpper());
+                        context.Send(NAME.SOURCE.PREVIEW, NAME.TYPE.VARIABLE, level + 1, "[[Tag Types]]", __GetString(a_Context, "Detected File Type Name"));
                     }
                 }
                 {
@@ -33,48 +33,46 @@ namespace resource.preview
                     for (var i = 0; i < a_Size; i++)
                     {
                         context.
-                            Send(NAME.SOURCE.PREVIEW, NAME.TYPE.PREVIEW, 1, "");
+                            Send(NAME.SOURCE.PREVIEW, NAME.TYPE.PREVIEW, level);
                     }
                 }
                 {
                     context.
                         SetState(NAME.STATE.FOOTER).
-                        Send(NAME.SOURCE.PREVIEW, NAME.TYPE.FOLDER, 1, "[[Size]]: " + __GetInteger(a_Context, "Width").ToString() + " x " + __GetInteger(a_Context, "Height").ToString());
+                        Send(NAME.SOURCE.PREVIEW, NAME.TYPE.FOLDER, level, "[[Size]]: " + __GetInteger(a_Context, "Width").ToString() + " x " + __GetInteger(a_Context, "Height").ToString());
                     {
-                        context.Send(NAME.SOURCE.PREVIEW, NAME.TYPE.FOLDER, 2, "[[Codecs]]");
+                        context.Send(NAME.SOURCE.PREVIEW, NAME.TYPE.FOLDER, level + 1, "[[Codecs]]");
                         {
                             context.
-                                SetComment("[[Audio]]").
-                                SetCommentHint("[[Media Type]]").
-                                Send(NAME.SOURCE.PREVIEW, NAME.TYPE.CLASS, 3, __GetString(a_Context, "Expected File Name Extension").ToUpper() + " Audio (" + __GetString(a_Context, "Major Brand") + ")");
+                                SetComment("[[Audio]]", "[[Media Type]]").
+                                Send(NAME.SOURCE.PREVIEW, NAME.TYPE.CLASS, level + 2, __GetString(a_Context, "Expected File Name Extension").ToUpper() + " Audio (" + __GetString(a_Context, "Major Brand") + ")");
                             {
-                                context.Send(NAME.SOURCE.PREVIEW, NAME.TYPE.INFO, 4, "[[Header]]");
+                                context.Send(NAME.SOURCE.PREVIEW, NAME.TYPE.INFO, level + 3, "[[Header]]");
                                 {
-                                    context.Send(NAME.SOURCE.PREVIEW, NAME.TYPE.VARIABLE, 5, "[[Channels]]", __GetChannels(a_Context).ToString());
-                                    context.Send(NAME.SOURCE.PREVIEW, NAME.TYPE.VARIABLE, 5, "[[Duration]]", __GetDuration(a_Context));
-                                    context.Send(NAME.SOURCE.PREVIEW, NAME.TYPE.VARIABLE, 5, "[[Media Types]]", "[[Audio]]");
-                                    context.Send(NAME.SOURCE.PREVIEW, NAME.TYPE.VARIABLE, 5, "[[Preferred Rate]]", __GetInteger(a_Context, "Preferred Rate").ToString());
-                                    context.Send(NAME.SOURCE.PREVIEW, NAME.TYPE.VARIABLE, 5, "[[Preferred Volume]]", __GetInteger(a_Context, "Preferred Volume").ToString());
+                                    context.Send(NAME.SOURCE.PREVIEW, NAME.TYPE.VARIABLE, level + 4, "[[Channels]]", __GetChannels(a_Context).ToString());
+                                    context.Send(NAME.SOURCE.PREVIEW, NAME.TYPE.VARIABLE, level + 4, "[[Duration]]", __GetDuration(a_Context));
+                                    context.Send(NAME.SOURCE.PREVIEW, NAME.TYPE.VARIABLE, level + 4, "[[Media Types]]", "[[Audio]]");
+                                    context.Send(NAME.SOURCE.PREVIEW, NAME.TYPE.VARIABLE, level + 4, "[[Preferred Rate]]", __GetInteger(a_Context, "Preferred Rate").ToString());
+                                    context.Send(NAME.SOURCE.PREVIEW, NAME.TYPE.VARIABLE, level + 4, "[[Preferred Volume]]", __GetInteger(a_Context, "Preferred Volume").ToString());
                                 }
                             }
                         }
                         {
                             context.
-                                SetComment("[[Video]]").
-                                SetCommentHint("[[Media Type]]").
-                                Send(NAME.SOURCE.PREVIEW, NAME.TYPE.CLASS, 3, __GetString(a_Context, "Expected File Name Extension").ToUpper() + " Video (" + __GetString(a_Context, "Major Brand") + ")");
+                                SetComment("[[Video]]", "[[Media Type]]").
+                                Send(NAME.SOURCE.PREVIEW, NAME.TYPE.CLASS, level + 2, __GetString(a_Context, "Expected File Name Extension").ToUpper() + " Video (" + __GetString(a_Context, "Major Brand") + ")");
                             {
-                                context.Send(NAME.SOURCE.PREVIEW, NAME.TYPE.INFO, 4, "[[Header]]");
+                                context.Send(NAME.SOURCE.PREVIEW, NAME.TYPE.INFO, level + 3, "[[Header]]");
                                 {
-                                    context.Send(NAME.SOURCE.PREVIEW, NAME.TYPE.VARIABLE, 5, "[[Duration]]", __GetDuration(a_Context));
-                                    context.Send(NAME.SOURCE.PREVIEW, NAME.TYPE.VARIABLE, 5, "[[Media Types]]", "[[Video]]");
+                                    context.Send(NAME.SOURCE.PREVIEW, NAME.TYPE.VARIABLE, level + 4, "[[Duration]]", __GetDuration(a_Context));
+                                    context.Send(NAME.SOURCE.PREVIEW, NAME.TYPE.VARIABLE, level + 4, "[[Media Types]]", "[[Video]]");
                                 }
                             }
                             {
-                                context.Send(NAME.SOURCE.PREVIEW, NAME.TYPE.INFO, 4, "[[Size]]");
+                                context.Send(NAME.SOURCE.PREVIEW, NAME.TYPE.INFO, level + 3, "[[Size]]");
                                 {
-                                    context.Send(NAME.SOURCE.PREVIEW, NAME.TYPE.VARIABLE, 5, "[[Width]]", __GetInteger(a_Context, "Width").ToString());
-                                    context.Send(NAME.SOURCE.PREVIEW, NAME.TYPE.VARIABLE, 5, "[[Height]]", __GetInteger(a_Context, "Height").ToString());
+                                    context.Send(NAME.SOURCE.PREVIEW, NAME.TYPE.VARIABLE, level + 4, "[[Width]]", __GetInteger(a_Context, "Width").ToString());
+                                    context.Send(NAME.SOURCE.PREVIEW, NAME.TYPE.VARIABLE, level + 4, "[[Height]]", __GetInteger(a_Context, "Height").ToString());
                                 }
                             }
                         }
@@ -84,7 +82,8 @@ namespace resource.preview
             else
             {
                 context.
-                    SendError(1, "[[File not found]]");
+                    Send(NAME.SOURCE.PREVIEW, NAME.TYPE.ERROR, level, "[[File not found]]").
+                    SendPreview(NAME.TYPE.ERROR, url);
             }
         }
 
